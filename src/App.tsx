@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import Canvas from "./components/Canvas";
 
 function App() {
   return (
@@ -24,7 +25,9 @@ function App() {
         <section className="h-20  text-[40px] pl-2 text-center ">
           Game of Life
         </section>
-        <section className="border">Canvas</section>
+        <section className="">
+          <Canvas />
+        </section>
         <section className="h-20  flex flex-row justify-center pt-6 gap-12">
           {/* explanation */}
           <Dialog>
