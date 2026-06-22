@@ -1,21 +1,79 @@
-import reactLogo from "./assets/react.svg";
-import viteLogo from "./assets/vite.svg";
-import heroImg from "./assets/hero.png";
 import "./App.css";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 function App() {
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div className="flex min-h-svh flex-col items-center justify-center">
+      <section className="w-full p-2 ">
+        {/* <div className="flex min-h-svh flex-col items-center justify-center">
           <Button>Click me here</Button>
-        </div>
+        </div> */}
+        {/* 1. main heading
+            2. main canvas
+            3. nav/butn bar
+         */}
+
+        <section className="h-20  text-[40px] pl-2 text-center ">
+          Game of Life
+        </section>
+        <section className="border">Canvas</section>
+        <section className="h-20  flex flex-row justify-center pt-6 gap-12">
+          {/* explanation */}
+          <Dialog>
+            <DialogTrigger
+              render={
+                <Button variant="outline" size="lg">
+                  Explanation
+                </Button>
+              }
+            />
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                <DialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your account and remove your data from our servers.
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+          {/* //patterns */}
+          <Dialog>
+            <DialogTrigger
+              render={
+                <Button variant="outline" size="lg">
+                  patterns
+                </Button>
+              }
+            />
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>patterns?</DialogTitle>
+                <DialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your account and remove your data from our servers.
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+          <Button variant="outline" size="lg">
+            Start
+          </Button>
+          <Button variant="outline" size="lg">
+            Next
+          </Button>
+          <Button variant="outline" size="lg">
+            Reset
+          </Button>
+        </section>
       </section>
     </>
   );
