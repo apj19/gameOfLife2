@@ -1,14 +1,7 @@
 import "./App.css";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+
 import Canvas from "./components/Canvas";
+import Controls from "./components/Controls";
 
 function App() {
   return (
@@ -30,52 +23,7 @@ function App() {
         </section>
         <section className="h-20  flex flex-row justify-center pt-6 gap-12">
           {/* explanation */}
-          <Dialog>
-            <DialogTrigger
-              render={
-                <Button variant="outline" size="lg">
-                  Explanation
-                </Button>
-              }
-            />
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Are you absolutely sure?</DialogTitle>
-                <DialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-          {/* //patterns */}
-          <Dialog>
-            <DialogTrigger
-              render={
-                <Button variant="outline" size="lg">
-                  patterns
-                </Button>
-              }
-            />
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>patterns?</DialogTitle>
-                <DialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-          <Button variant="outline" size="lg">
-            Start
-          </Button>
-          <Button variant="outline" size="lg">
-            Next
-          </Button>
-          <Button variant="outline" size="lg">
-            Reset
-          </Button>
+          <Controls />
         </section>
       </section>
     </>

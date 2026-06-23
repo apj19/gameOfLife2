@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { Stage, Layer, Line, Rect } from "react-konva";
 import type { KonvaEventObject } from "konva/lib/Node";
-import { nextGeneration } from "@/lib/gameRules";
+// import { nextGeneration } from "@/lib/gameRules";
+import { useCellStore } from "@/store/cellStore";
 
 function Canvas() {
-  //setting convas size
-
+  //seeting convas dynamic size as per views
   const [dimension, setDimension] = useState({
     width: Math.floor(window.innerWidth),
     height: Math.floor(window.innerHeight * 0.7),
   });
-  //stroing clicked cells
-  const [aliveCells, setAliveCells] = useState<Set<string>>(new Set());
-  const [start, setStart] = useState(false);
 
+  const { aliveCells, addAliveCell } = useCellStore();
+
+  //updating grid for conavs as per size
   useEffect(() => {
     function handelResize() {
       setDimension({
@@ -27,18 +27,6 @@ function Canvas() {
     return () => window.removeEventListener("resize", handelResize);
   }, []);
 
-  //useeffect for start/stop
-  useEffect(() => {
-    if (!start) return;
-
-    const interval = setInterval(() => {
-      setAliveCells((prv) => nextGeneration(prv));
-      // console.log("changed");
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [start]);
-
   const vertivalLines: number[] = [];
   const horizontalLines: number[] = [];
   const GRID_SIZE = 20;
@@ -51,8 +39,7 @@ function Canvas() {
     horizontalLines.push(i);
   }
 
-  //handle click on canvas
-
+  //handle click on canvas,add alive cell
   function handleClick(e: KonvaEventObject<MouseEvent>) {
     const stage = e.target.getStage();
     const pointerPos = stage!.getPointerPosition();
@@ -64,11 +51,8 @@ function Canvas() {
 
     let tesmpSet = new Set<string>(aliveCells);
     tesmpSet.add(`${x},${y}`);
-    setAliveCells(tesmpSet);
-  }
-
-  function handlenextgen() {
-    setAliveCells(nextGeneration(aliveCells));
+    // setAliveCells(tesmpSet);
+    addAliveCell(tesmpSet);
   }
 
   return (
@@ -80,6 +64,7 @@ function Canvas() {
         className="border"
         onClick={handleClick}
       >
+        {/* //layer for grid */}
         <Layer>
           {vertivalLines.map((x, i) => (
             <Line
@@ -99,17 +84,8 @@ function Canvas() {
             />
           ))}
         </Layer>
+        {/* layer for cells? */}
         <Layer>
-          {/* <Rect
-            x={20}
-            y={20}
-            width={20}
-            height={20}
-            stroke="green"
-            fill="green"
-            strokeWidth={1}
-          /> */}
-
           {[...aliveCells].map((c, i) => {
             const [xPos, yPos] = c.split(",").map((e) => Number(e));
 
@@ -120,20 +96,14 @@ function Canvas() {
                 y={yPos * 20}
                 width={20}
                 height={20}
-                stroke="#FFD54F"
-                fill="#FFD54F"
+                stroke="oklch(79.2% 0.209 151.711)"
+                fill="oklch(79.2% 0.209 151.711)"
                 strokeWidth={1}
               />
             );
           })}
         </Layer>
       </Stage>
-      <button onClick={handlenextgen} type="button">
-        test next
-      </button>
-      <button className="ml-8" onClick={() => setStart(!start)} type="button">
-        Start
-      </button>
     </>
   );
 }
