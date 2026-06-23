@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Stage, Layer, Line, Rect } from "react-konva";
 import type { KonvaEventObject } from "konva/lib/Node";
+import { nextGeneration } from "@/lib/gameRules";
 
 function Canvas() {
   //setting convas size
@@ -11,6 +12,7 @@ function Canvas() {
   });
   //stroing clicked cells
   const [aliveCells, setAliveCells] = useState<Set<string>>(new Set());
+  const [start, setStart] = useState(false);
 
   useEffect(() => {
     function handelResize() {
@@ -24,6 +26,18 @@ function Canvas() {
 
     return () => window.removeEventListener("resize", handelResize);
   }, []);
+
+  //useeffect for start/stop
+  useEffect(() => {
+    if (!start) return;
+
+    const interval = setInterval(() => {
+      setAliveCells((prv) => nextGeneration(prv));
+      // console.log("changed");
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [start]);
 
   const vertivalLines: number[] = [];
   const horizontalLines: number[] = [];
@@ -51,6 +65,10 @@ function Canvas() {
     let tesmpSet = new Set<string>(aliveCells);
     tesmpSet.add(`${x},${y}`);
     setAliveCells(tesmpSet);
+  }
+
+  function handlenextgen() {
+    setAliveCells(nextGeneration(aliveCells));
   }
 
   return (
@@ -102,14 +120,20 @@ function Canvas() {
                 y={yPos * 20}
                 width={20}
                 height={20}
-                stroke="green"
-                fill="green"
+                stroke="#FFD54F"
+                fill="#FFD54F"
                 strokeWidth={1}
               />
             );
           })}
         </Layer>
       </Stage>
+      <button onClick={handlenextgen} type="button">
+        test next
+      </button>
+      <button className="ml-8" onClick={() => setStart(!start)} type="button">
+        Start
+      </button>
     </>
   );
 }
