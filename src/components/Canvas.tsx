@@ -1,20 +1,48 @@
-import { useEffect, useState } from "react";
-import { Stage, Layer, Line, Rect } from "react-konva";
+import { useEffect, useRef, useState } from "react";
+import { Stage, Layer, Rect } from "react-konva";
 import type { KonvaEventObject } from "konva/lib/Node";
 // import { nextGeneration } from "@/lib/gameRules";
 import { useCellStore } from "@/store/cellStore";
+import Konva from "konva";
+
+// interface grid {
+//   hLine: number[];
+//   vLine: number[];
+// }
+
+// interface camera {
+//   x: number;
+//   y: number;
+// }
 
 function Canvas() {
+  const GRID_SIZE = 20;
   //seeting convas dynamic size as per views
   const [dimension, setDimension] = useState({
     width: Math.floor(window.innerWidth),
     height: Math.floor(window.innerHeight * 0.7),
   });
 
+  const gridLyer = useRef<Konva.Layer>(null);
+
   const { aliveCells, addAliveCell } = useCellStore();
+
+  //grid in state
+
+  // const [gridCordinate, setGridCordinate] = useState<grid>({
+  //   hLine: [],
+  //   vLine: [],
+  // });
+
+  // const [stageCordinates, setstageCordinates] = useState<camera>({
+  //   x: 0,
+  //   y: 0,
+  // });
 
   //updating grid for conavs as per size
   useEffect(() => {
+    drawGrid(dimension.width, dimension.height, 0, 0);
+
     function handelResize() {
       setDimension({
         width: window.innerWidth * 0.9,
@@ -27,16 +55,46 @@ function Canvas() {
     return () => window.removeEventListener("resize", handelResize);
   }, []);
 
-  const vertivalLines: number[] = [];
-  const horizontalLines: number[] = [];
-  const GRID_SIZE = 20;
+  function drawGrid(
+    width: number,
+    height: number,
+    viewStartX: number = 0,
+    viewStartY: number = 0,
+  ) {
+    const layer = gridLyer.current;
 
-  for (let i = 0; i < Math.floor(dimension.width); i = i + GRID_SIZE) {
-    vertivalLines.push(i);
-  }
+    if (!layer) return;
 
-  for (let i = 0; i < Math.floor(dimension.height); i += GRID_SIZE) {
-    horizontalLines.push(i);
+    layer.destroyChildren();
+
+    let viewEndX = viewStartX + width;
+    let viewEndY = viewStartY + height;
+
+    // console.log("camViewX", viewStartX, viewEndX);
+    // console.log("camViewY", viewStartY, viewEndY);
+    // console.group("camViewX", viewStartX, viewEndX);
+
+    for (let i = viewStartX; i < viewEndX; i = i + GRID_SIZE) {
+      const line = new Konva.Line({
+        points: [i, viewStartY, i, viewEndY],
+        stroke: "#ccc",
+        strokeWidth: 1,
+      });
+
+      layer.add(line);
+    }
+
+    for (let i = viewStartY; i < viewEndY; i += GRID_SIZE) {
+      const line = new Konva.Line({
+        points: [viewStartX, i, viewEndX, i],
+        stroke: "#ccc",
+        strokeWidth: 1,
+      });
+
+      layer.add(line);
+    }
+
+    layer.batchDraw();
   }
 
   //handle click on canvas,add alive cell
@@ -63,26 +121,37 @@ function Canvas() {
         height={dimension.height}
         className="border"
         onClick={handleClick}
+        draggable={true}
+        onDragEnd={(e) => {
+          // console.log({ x: e.target.x(), y: e.target.y() });
+
+          let viewStartX: number = -e.target.x();
+          let viewStartY: number = -e.target.y();
+
+          // console.log("new window x", xStart, xEnd, dimension.width);
+
+          drawGrid(dimension.width, dimension.height, viewStartX, viewStartY);
+        }}
       >
         {/* //layer for grid */}
-        <Layer>
-          {vertivalLines.map((x, i) => (
+        <Layer ref={gridLyer}>
+          {/* {gridCordinate.vLine.map((x, i) => (
             <Line
               key={`v-${i}`}
-              points={[x, 0, x, dimension.height]}
+              points={[x, stageCordinates.y, x, dimension.height]}
               stroke="#ccc"
               strokeWidth={0.5}
             />
           ))}
 
-          {horizontalLines.map((y, j) => (
+          {gridCordinate.hLine.map((y, j) => (
             <Line
               key={`h-${j}`}
-              points={[0, y, dimension.width, y]}
+              points={[stageCordinates.x, y, dimension.width, y]}
               stroke="#ccc"
               strokeWidth={0.5}
             />
-          ))}
+          ))} */}
         </Layer>
         {/* layer for cells? */}
         <Layer>
