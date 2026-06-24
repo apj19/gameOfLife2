@@ -10,7 +10,7 @@ import Konva from "konva";
 //   vLine: number[];
 // }
 
-// interface camera {
+// interface stageCordinate {
 //   x: number;
 //   y: number;
 // }
@@ -34,7 +34,7 @@ function Canvas() {
   //   vLine: [],
   // });
 
-  // const [stageCordinates, setstageCordinates] = useState<camera>({
+  // const [stageCordinates, setstageCordinates] = useState<stageCordinate>({
   //   x: 0,
   //   y: 0,
   // });
@@ -70,25 +70,24 @@ function Canvas() {
     let viewEndX = viewStartX + width;
     let viewEndY = viewStartY + height;
 
-    // console.log("camViewX", viewStartX, viewEndX);
-    // console.log("camViewY", viewStartY, viewEndY);
-    // console.group("camViewX", viewStartX, viewEndX);
+    const xStart = Math.floor(viewStartX / GRID_SIZE) * GRID_SIZE;
+    const yStart = Math.floor(viewStartY / GRID_SIZE) * GRID_SIZE;
 
-    for (let i = viewStartX; i < viewEndX; i = i + GRID_SIZE) {
+    for (let i = xStart; i < Math.floor(viewEndX); i = i + GRID_SIZE) {
       const line = new Konva.Line({
         points: [i, viewStartY, i, viewEndY],
         stroke: "#ccc",
-        strokeWidth: 1,
+        strokeWidth: 0.5,
       });
 
       layer.add(line);
     }
 
-    for (let i = viewStartY; i < viewEndY; i += GRID_SIZE) {
+    for (let i = yStart; i < Math.floor(viewEndY); i += GRID_SIZE) {
       const line = new Konva.Line({
         points: [viewStartX, i, viewEndX, i],
         stroke: "#ccc",
-        strokeWidth: 1,
+        strokeWidth: 0.5,
       });
 
       layer.add(line);
@@ -100,22 +99,20 @@ function Canvas() {
   //handle click on canvas,add alive cell
   function handleClick(e: KonvaEventObject<MouseEvent>) {
     const stage = e.target.getStage();
-    const pointerPos = stage!.getPointerPosition();
+    const pointerPos = stage!.getRelativePointerPosition();
     if (!pointerPos) return;
 
     const x = Math.floor(pointerPos.x / GRID_SIZE);
     const y = Math.floor(pointerPos.y / GRID_SIZE);
-    // console.log(pointerPos, x, y);
+    console.group("Click Position", pointerPos, x, y);
 
     let tesmpSet = new Set<string>(aliveCells);
     tesmpSet.add(`${x},${y}`);
-    // setAliveCells(tesmpSet);
     addAliveCell(tesmpSet);
   }
 
   return (
     <>
-      {/* <canvas ref={canvasRef} className="w-full h-[75vh] border-2" /> */}
       <Stage
         width={dimension.width}
         height={dimension.height}
@@ -128,7 +125,10 @@ function Canvas() {
           let viewStartX: number = -e.target.x();
           let viewStartY: number = -e.target.y();
 
-          // console.log("new window x", xStart, xEnd, dimension.width);
+          // const xStart = Math.floor(viewStartX / GRID_SIZE) * GRID_SIZE;
+          // const yStart = Math.floor(viewStartY / GRID_SIZE) * GRID_SIZE;
+
+          // setstageCordinates({ x: xStart, y: yStart });
 
           drawGrid(dimension.width, dimension.height, viewStartX, viewStartY);
         }}

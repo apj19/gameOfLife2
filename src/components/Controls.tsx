@@ -11,12 +11,17 @@ import { useCellStore } from "@/store/cellStore";
 import { useEffect, useState } from "react";
 
 export default function Controls() {
-  const { nextGen } = useCellStore();
+  const { nextGen, clearCells } = useCellStore();
   const [start, setStart] = useState(false);
 
   function handlenextgen() {
     // setAliveCells(nextGeneration(aliveCells));
     nextGen();
+  }
+
+  function handleRest() {
+    clearCells();
+    setStart(false);
   }
 
   useEffect(() => {
@@ -26,7 +31,7 @@ export default function Controls() {
       // setAliveCells((prv) => nextGeneration(prv));
       nextGen();
       // console.log("changed");
-    }, 1000);
+    }, 500);
 
     return () => clearInterval(interval);
   }, [start]);
@@ -71,12 +76,12 @@ export default function Controls() {
         </DialogContent>
       </Dialog>
       <Button onClick={() => setStart(!start)} variant="outline" size="lg">
-        Start
+        {start ? "Stop" : "Start"}
       </Button>
       <Button onClick={handlenextgen} variant="outline" size="lg">
         Next
       </Button>
-      <Button variant="outline" size="lg">
+      <Button onClick={handleRest} variant="outline" size="lg">
         Reset
       </Button>
     </>

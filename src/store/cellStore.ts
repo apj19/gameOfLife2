@@ -5,6 +5,7 @@ interface CellStore {
   aliveCells: Set<string>;
   addAliveCell: (value: Set<string>) => void;
   nextGen: () => void;
+  clearCells: () => void;
   //   increase: () => void
   //   decrease: () => void
   //   setCount: (value: number) => void
@@ -16,6 +17,7 @@ export const useCellStore = create<CellStore>((set) => ({
   addAliveCell: (value: Set<string>) => set({ aliveCells: value }),
   nextGen: () =>
     set((state) => ({ aliveCells: nextGeneration(state.aliveCells) })),
+  clearCells: () => set((state) => ({ aliveCells: new Set<string>(null) })),
   //   increase: () => set((state) => ({ count: state.count + 1 })),
   //   decrease: () => set((state) => ({ count: state.count - 1 })),
   //   setCount: (value: number) => set({ count: value }),
