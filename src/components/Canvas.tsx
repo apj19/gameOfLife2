@@ -25,7 +25,7 @@ function Canvas() {
 
   const gridLyer = useRef<Konva.Layer>(null);
 
-  const { aliveCells, addAliveCell } = useCellStore();
+  const { aliveCells, addAliveCell, isAllDead } = useCellStore();
 
   //grid in state
 
@@ -104,11 +104,19 @@ function Canvas() {
 
     const x = Math.floor(pointerPos.x / GRID_SIZE);
     const y = Math.floor(pointerPos.y / GRID_SIZE);
-    console.group("Click Position", pointerPos, x, y);
+    // console.group("Click Position", pointerPos, x, y);
 
     let tesmpSet = new Set<string>(aliveCells);
-    tesmpSet.add(`${x},${y}`);
+
+    let currCellKey = `${x},${y}`;
+    if (tesmpSet.has(currCellKey)) {
+      tesmpSet.delete(currCellKey);
+    } else {
+      tesmpSet.add(currCellKey);
+    }
+
     addAliveCell(tesmpSet);
+    isAllDead();
   }
 
   return (

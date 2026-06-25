@@ -11,7 +11,7 @@ import { useCellStore } from "@/store/cellStore";
 import { useEffect, useState } from "react";
 
 export default function Controls() {
-  const { nextGen, clearCells } = useCellStore();
+  const { nextGen, clearCells, allDead, isAllDead } = useCellStore();
   const [start, setStart] = useState(false);
 
   function handlenextgen() {
@@ -22,6 +22,7 @@ export default function Controls() {
   function handleRest() {
     setStart(false);
     clearCells();
+    isAllDead();
   }
 
   useEffect(() => {
@@ -29,8 +30,15 @@ export default function Controls() {
 
     const interval = setInterval(() => {
       // setAliveCells((prv) => nextGeneration(prv));
-      nextGen();
-      // console.log("changed");
+
+      nextGen(); //this updated store state
+      const latest = useCellStore.getState().aliveCells;
+      if (latest.size == 0) {
+        setStart(false);
+        isAllDead();
+      }
+
+      console.log("changed");
     }, 500);
 
     return () => clearInterval(interval);
@@ -75,13 +83,28 @@ export default function Controls() {
           </DialogHeader>
         </DialogContent>
       </Dialog>
-      <Button onClick={() => setStart(!start)} variant="outline" size="lg">
+      <Button
+        onClick={() => setStart(!start)}
+        disabled={allDead ? true : false}
+        variant="outline"
+        size="lg"
+      >
         {start ? "Stop" : "Start"}
       </Button>
-      <Button onClick={handlenextgen} variant="outline" size="lg">
+      <Button
+        onClick={handlenextgen}
+        disabled={allDead ? true : false}
+        variant="outline"
+        size="lg"
+      >
         Next
       </Button>
-      <Button onClick={handleRest} variant="outline" size="lg">
+      <Button
+        onClick={handleRest}
+        disabled={allDead ? true : false}
+        variant="outline"
+        size="lg"
+      >
         Reset
       </Button>
     </>
