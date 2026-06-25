@@ -18,7 +18,7 @@ function App() {
         <section className="h-20  text-[40px] pl-2 text-center ">
           Game of Life
         </section>
-        <section className="">
+        <section className=" m-4 border-amber-300 border-2 rounded-md">
           <Canvas />
         </section>
         <section className="h-20  flex flex-row justify-center pt-6 gap-12">

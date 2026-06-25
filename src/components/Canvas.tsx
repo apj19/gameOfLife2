@@ -27,6 +27,8 @@ function Canvas() {
 
   const { aliveCells, addAliveCell, isAllDead } = useCellStore();
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   //grid in state
 
   // const [gridCordinate, setGridCordinate] = useState<grid>({
@@ -41,18 +43,24 @@ function Canvas() {
 
   //updating grid for conavs as per size
   useEffect(() => {
-    drawGrid(dimension.width, dimension.height, 0, 0);
+    const container = containerRef.current;
+    if (!container) return;
 
-    function handelResize() {
-      setDimension({
-        width: window.innerWidth * 0.9,
-        height: window.innerHeight * 0.7,
-      });
+    const { width, height } = container.getBoundingClientRect();
+    drawGrid(dimension.width, dimension.height, 0, 0);
+    setDimension({
+      width,
+      height,
+    });
+
+    function handleResize() {
+      const { width, height } = container!.getBoundingClientRect();
+      setDimension({ width, height });
     }
 
-    window.addEventListener("resize", handelResize);
+    window.addEventListener("resize", handleResize);
 
-    return () => window.removeEventListener("resize", handelResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   function drawGrid(
@@ -121,29 +129,30 @@ function Canvas() {
 
   return (
     <>
-      <Stage
-        width={dimension.width}
-        height={dimension.height}
-        className="border"
-        onClick={handleClick}
-        draggable={true}
-        onDragEnd={(e) => {
-          // console.log({ x: e.target.x(), y: e.target.y() });
+      <div ref={containerRef} style={{ width: "100%", height: "100%" }}>
+        <Stage
+          width={dimension.width}
+          height={dimension.height}
+          className="border"
+          onClick={handleClick}
+          draggable={true}
+          onDragEnd={(e) => {
+            // console.log({ x: e.target.x(), y: e.target.y() });
 
-          let viewStartX: number = -e.target.x();
-          let viewStartY: number = -e.target.y();
+            let viewStartX: number = -e.target.x();
+            let viewStartY: number = -e.target.y();
 
-          // const xStart = Math.floor(viewStartX / GRID_SIZE) * GRID_SIZE;
-          // const yStart = Math.floor(viewStartY / GRID_SIZE) * GRID_SIZE;
+            // const xStart = Math.floor(viewStartX / GRID_SIZE) * GRID_SIZE;
+            // const yStart = Math.floor(viewStartY / GRID_SIZE) * GRID_SIZE;
 
-          // setstageCordinates({ x: xStart, y: yStart });
+            // setstageCordinates({ x: xStart, y: yStart });
 
-          drawGrid(dimension.width, dimension.height, viewStartX, viewStartY);
-        }}
-      >
-        {/* //layer for grid */}
-        <Layer ref={gridLyer}>
-          {/* {gridCordinate.vLine.map((x, i) => (
+            drawGrid(dimension.width, dimension.height, viewStartX, viewStartY);
+          }}
+        >
+          {/* //layer for grid */}
+          <Layer ref={gridLyer}>
+            {/* {gridCordinate.vLine.map((x, i) => (
             <Line
               key={`v-${i}`}
               points={[x, stageCordinates.y, x, dimension.height]}
@@ -160,27 +169,28 @@ function Canvas() {
               strokeWidth={0.5}
             />
           ))} */}
-        </Layer>
-        {/* layer for cells? */}
-        <Layer>
-          {[...aliveCells].map((c, i) => {
-            const [xPos, yPos] = c.split(",").map((e) => Number(e));
+          </Layer>
+          {/* layer for cells? */}
+          <Layer>
+            {[...aliveCells].map((c, i) => {
+              const [xPos, yPos] = c.split(",").map((e) => Number(e));
 
-            return (
-              <Rect
-                key={`c-${i}`}
-                x={xPos * 20}
-                y={yPos * 20}
-                width={20}
-                height={20}
-                stroke="oklch(79.2% 0.209 151.711)"
-                fill="oklch(79.2% 0.209 151.711)"
-                strokeWidth={1}
-              />
-            );
-          })}
-        </Layer>
-      </Stage>
+              return (
+                <Rect
+                  key={`c-${i}`}
+                  x={xPos * 20}
+                  y={yPos * 20}
+                  width={20}
+                  height={20}
+                  stroke="oklch(79.2% 0.209 151.711)"
+                  fill="oklch(79.2% 0.209 151.711)"
+                  strokeWidth={1}
+                />
+              );
+            })}
+          </Layer>
+        </Stage>
+      </div>
     </>
   );
 }
