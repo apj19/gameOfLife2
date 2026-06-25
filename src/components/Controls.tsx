@@ -1,5 +1,12 @@
 import { Button } from "@/components/ui/button";
 import {
+  IconExclamationCircle,
+  IconBook,
+  IconPlayerPlay,
+  IconArrowForwardUp,
+  IconRestore,
+} from "@tabler/icons-react";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -38,7 +45,7 @@ export default function Controls() {
         isAllDead();
       }
 
-      console.log("changed");
+      // console.group("changed");
     }, 500);
 
     return () => clearInterval(interval);
@@ -50,6 +57,7 @@ export default function Controls() {
         <DialogTrigger
           render={
             <Button variant="outline" size="lg">
+              <IconExclamationCircle data-icon="inline-start" />
               Explanation
             </Button>
           }
@@ -69,6 +77,7 @@ export default function Controls() {
         <DialogTrigger
           render={
             <Button variant="outline" size="lg">
+              <IconBook data-icon="inline-start" />
               patterns
             </Button>
           }
@@ -89,6 +98,7 @@ export default function Controls() {
         variant="outline"
         size="lg"
       >
+        <IconPlayerPlay data-icon="inline-start" />
         {start ? "Stop" : "Start"}
       </Button>
       <Button
@@ -97,6 +107,7 @@ export default function Controls() {
         variant="outline"
         size="lg"
       >
+        <IconArrowForwardUp data-icon="inline-start" />
         Next
       </Button>
       <Button
@@ -105,8 +116,10 @@ export default function Controls() {
         variant="outline"
         size="lg"
       >
+        <IconRestore data-icon="inline-start" />
         Reset
       </Button>
     </>
   );
 }
+// data-icon="inline-start"

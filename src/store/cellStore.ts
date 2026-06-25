@@ -20,7 +20,7 @@ export const useCellStore = create<CellStore>((set) => ({
   addAliveCell: (value: Set<string>) => set({ aliveCells: value }),
   nextGen: () =>
     set((state) => ({ aliveCells: nextGeneration(state.aliveCells) })),
-  clearCells: () => set((state) => ({ aliveCells: new Set<string>(null) })),
+  clearCells: () => set(() => ({ aliveCells: new Set<string>(null) })),
   isAllDead: () =>
     set((state) => {
       if (state.aliveCells.size == 0) {
