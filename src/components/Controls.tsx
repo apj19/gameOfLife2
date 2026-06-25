@@ -20,8 +20,8 @@ export default function Controls() {
   }
 
   function handleRest() {
-    clearCells();
     setStart(false);
+    clearCells();
   }
 
   useEffect(() => {
