@@ -16,14 +16,22 @@ import {
 import { useCellStore } from "@/store/cellStore";
 import { useEffect, useState } from "react";
 import PatternList from "./ui/Pattrenlist";
-import { Slider } from "@/components/ui/slider";
+import { useNavigate } from "react-router-dom";
 
 // import { Icon } from "node_modules/@base-ui/react/select/index.parts";
 
 export default function Controls() {
-  // console.log("control  rendered");
+  const navigate = useNavigate();
 
-  const { nextGen, clearCells, allDead, isAllDead } = useCellStore();
+  const {
+    nextGen,
+    clearCells,
+    allDead,
+    isAllDead,
+    speed,
+    setGeneration,
+    restGeneration,
+  } = useCellStore();
   // const nextGen = useCellStore((state) => state.nextGen);
   // const clearCells = useCellStore((state) => state.clearCells);
   // const isAllDead = useCellStore((state) => state.isAllDead);
@@ -36,32 +44,41 @@ export default function Controls() {
   function handlenextgen() {
     // setAliveCells(nextGeneration(aliveCells));
     nextGen();
+    setGeneration();
   }
 
   function handleRest() {
     setStart(false);
-    clearCells();
-    isAllDead();
+    // clearCells();
+    // isAllDead();
+    restGeneration();
+    navigate(`/`, { replace: true });
   }
 
   useEffect(() => {
+    // console.group("spped useEffect", speed);
+
     if (!start) return;
 
-    const interval = setInterval(() => {
-      // setAliveCells((prv) => nextGeneration(prv));
+    const interval = setInterval(
+      () => {
+        // setAliveCells((prv) => nextGeneration(prv));
 
-      nextGen(); //this updated store state
-      const latest = useCellStore.getState().aliveCells;
-      if (latest.size == 0) {
-        setStart(false);
-        isAllDead();
-      }
+        nextGen(); //this updated store state
+        setGeneration();
+        const latest = useCellStore.getState().aliveCells;
+        if (latest.size == 0) {
+          setStart(false);
+          isAllDead();
+        }
 
-      // console.group("changed");
-    }, 500);
+        // console.group("changed");
+      },
+      Math.floor(1000 / speed),
+    );
 
     return () => clearInterval(interval);
-  }, [start]);
+  }, [start, speed]);
 
   return (
     <>

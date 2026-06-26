@@ -4,6 +4,11 @@ import { create } from "zustand";
 interface CellStore {
   aliveCells: Set<string>;
   allDead: boolean;
+  speed: number;
+  generation: number;
+  setGeneration: () => void;
+  restGeneration: () => void;
+  setSpeed: (value: number) => void;
   addAliveCell: (value: Set<string>) => void;
   nextGen: () => void;
   clearCells: () => void;
@@ -16,7 +21,12 @@ interface CellStore {
 // Create the store
 export const useCellStore = create<CellStore>((set) => ({
   aliveCells: new Set(), // initial state,
-  allDead: true,
+  allDead: false,
+  speed: 2,
+  generation: 1,
+  setGeneration: () => set((state) => ({ generation: state.generation + 1 })),
+  restGeneration: () => set({ generation: 1 }),
+  setSpeed: (value: number) => set({ speed: value }),
   addAliveCell: (value: Set<string>) => set({ aliveCells: value }),
   nextGen: () =>
     set((state) => ({ aliveCells: nextGeneration(state.aliveCells) })),

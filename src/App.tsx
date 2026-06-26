@@ -4,6 +4,7 @@ import "./App.css";
 import Canvas from "./components/Canvas";
 import Controls from "./components/Controls";
 
+
 function App() {
   return (
     <>
@@ -15,6 +16,7 @@ function App() {
         <section className=" m-4">
           <Routes>
             <Route path="/" element={<Navigate to="/glider" replace />} />
+            {/* <Route path="/temp" element={<Fixedcontrols />} /> */}
             <Route path="/:patternParams" element={<Canvas />} />
           </Routes>
           {/* </section>

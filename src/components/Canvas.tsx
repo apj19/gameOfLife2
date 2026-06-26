@@ -8,6 +8,7 @@ import intailGameSetup from "@/lib/intailGameSetup";
 // import { lwss } from "@/lib/gamePopulaerPattrens";
 import { useNavigate, useParams } from "react-router-dom";
 import * as PATTERNS from "@/lib/gamePopulaerPattrens";
+import Fixedcontrols from "./Fixedcontrols";
 
 function Canvas() {
   const GRID_SIZE = 20;
@@ -41,7 +42,7 @@ function Canvas() {
       const selectedPattern = PATTERNS[patternParams as PatternKey];
 
       addAliveCell(intailGameSetup(selectedPattern));
-      isAllDead();
+      // isAllDead();
     }
   }, [patternParams]);
 
@@ -135,6 +136,7 @@ function Canvas() {
   return (
     <>
       <div ref={containerRef} style={{ width: "100%", height: "100%" }}>
+        <Fixedcontrols />
         <Stage
           width={dimension.width}
           height={dimension.height}
