@@ -14,10 +14,14 @@ export default function Pattrenlist({
   onSelectClose?: () => void;
 }) {
   const patterns = [
+    { name: "Average", path: "/average" },
     { name: "Glider", path: "/glider" },
     { name: "LWSS", path: "/lwss" },
     { name: "Toad", path: "/toad" },
     { name: "Beacon", path: "/beacon" },
+    { name: "Achimsotherp", path: "/achimsotherp16" },
+    { name: "Snacker", path: "/snacker2" },
+    { name: "Almost Symmetric", path: "/almosymmetric" },
   ];
 
   return (

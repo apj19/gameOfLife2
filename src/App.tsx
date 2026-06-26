@@ -1,16 +1,17 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Link, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 
 import Canvas from "./components/Canvas";
 import Controls from "./components/Controls";
-
 
 function App() {
   return (
     <>
       <section className="w-full p-2 ">
         <section className="flex items-center justify-center min-h-20 sm:min-h-24 md:min-h-28 text-3xl sm:text-4xl md:text-5xl font-semibold px-4 text-center">
-          Game of Life
+          <Link to="/glider" className="text-white">
+            Game of Life
+          </Link>
         </section>
 
         <section className=" m-4">

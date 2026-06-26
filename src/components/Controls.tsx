@@ -23,15 +23,8 @@ import { useNavigate } from "react-router-dom";
 export default function Controls() {
   const navigate = useNavigate();
 
-  const {
-    nextGen,
-    clearCells,
-    allDead,
-    isAllDead,
-    speed,
-    setGeneration,
-    restGeneration,
-  } = useCellStore();
+  const { nextGen, allDead, isAllDead, speed, setGeneration, restGeneration } =
+    useCellStore();
   // const nextGen = useCellStore((state) => state.nextGen);
   // const clearCells = useCellStore((state) => state.clearCells);
   // const isAllDead = useCellStore((state) => state.isAllDead);
