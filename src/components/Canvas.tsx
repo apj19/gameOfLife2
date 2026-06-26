@@ -4,19 +4,14 @@ import type { KonvaEventObject } from "konva/lib/Node";
 // import { nextGeneration } from "@/lib/gameRules";
 import { useCellStore } from "@/store/cellStore";
 import Konva from "konva";
-
-// interface grid {
-//   hLine: number[];
-//   vLine: number[];
-// }
-
-// interface stageCordinate {
-//   x: number;
-//   y: number;
-// }
+import intailGameSetup from "@/lib/intailGameSetup";
+// import { lwss } from "@/lib/gamePopulaerPattrens";
+import { useNavigate, useParams } from "react-router-dom";
+import * as PATTERNS from "@/lib/gamePopulaerPattrens";
 
 function Canvas() {
   const GRID_SIZE = 20;
+  const navigate = useNavigate();
   //seeting convas dynamic size as per views
   const [dimension, setDimension] = useState({
     width: Math.floor(window.innerWidth),
@@ -29,17 +24,26 @@ function Canvas() {
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  //grid in state
+  const { patternParams } = useParams();
+  // console.log("pattern", pattern);
+  //selecting pattern as per url params
+  type PatternKey = keyof typeof PATTERNS;
 
-  // const [gridCordinate, setGridCordinate] = useState<grid>({
-  //   hLine: [],
-  //   vLine: [],
-  // });
+  // const defaultPattern: PatternKey = "toad";
 
-  // const [stageCordinates, setstageCordinates] = useState<stageCordinate>({
-  //   x: 0,
-  //   y: 0,
-  // });
+  useEffect(() => {
+    // let selectedPattern: number[][] = PATTERNS[defaultPattern];
+
+    if (!patternParams || !(patternParams in PATTERNS)) {
+      navigate(`/`, { replace: true });
+      return;
+    } else {
+      const selectedPattern = PATTERNS[patternParams as PatternKey];
+
+      addAliveCell(intailGameSetup(selectedPattern));
+      isAllDead();
+    }
+  }, [patternParams]);
 
   //updating grid for conavs as per size
   useEffect(() => {
@@ -56,6 +60,7 @@ function Canvas() {
     function handleResize() {
       const { width, height } = container!.getBoundingClientRect();
       setDimension({ width, height });
+      console.log("resized", width, height);
     }
 
     window.addEventListener("resize", handleResize);

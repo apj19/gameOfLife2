@@ -9,17 +9,29 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useCellStore } from "@/store/cellStore";
 import { useEffect, useState } from "react";
+import PatternList from "./ui/Pattrenlist";
+import { Slider } from "@/components/ui/slider";
+
+// import { Icon } from "node_modules/@base-ui/react/select/index.parts";
 
 export default function Controls() {
+  // console.log("control  rendered");
+
   const { nextGen, clearCells, allDead, isAllDead } = useCellStore();
+  // const nextGen = useCellStore((state) => state.nextGen);
+  // const clearCells = useCellStore((state) => state.clearCells);
+  // const isAllDead = useCellStore((state) => state.isAllDead);
+  // const allDead = useCellStore((state) => state.allDead);
+
   const [start, setStart] = useState(false);
+
+  const [open, setOpen] = useState(false);
 
   function handlenextgen() {
     // setAliveCells(nextGeneration(aliveCells));
@@ -62,18 +74,49 @@ export default function Controls() {
             </Button>
           }
         />
-        <DialogContent>
+        <DialogContent className="w-[95vw]! md:w-[60vw]! lg:w-[50vw]! max-w-none!">
           <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </DialogDescription>
+            <DialogTitle className="text-lg font-semibold">
+              Explanation
+            </DialogTitle>
+            <div>
+              <div className="my-4">
+                The Game of Life is not your typical computer game. It is a
+                cellular automaton, and was invented by Cambridge mathematician
+                John Conway. This game became widely known when it was mentioned
+                in an article published by Scientific American in 1970. It
+                consists of a grid of cells which, based on a few mathematical
+                rules, can live, die or multiply. Depending on the initial
+                conditions, the cells form various patterns throughout the
+                course of the game.
+              </div>
+              <div className="mt-2 border-rose-200 border-2 rounded-md p-4">
+                <span className="text-lg font-semibold">
+                  Game of Life Rules
+                </span>
+                <ul className="list-disc list-inside my-4">
+                  <li className="mb-2">
+                    Each cell with one or no neighbors dies, as if by solitude.
+                  </li>
+                  <li className="mb-2">
+                    Each cell with two or three neighbors lives on.
+                  </li>
+                  <li className="mb-2">
+                    Each cell with four or more neighbors dies, as if by
+                    overpopulation.
+                  </li>
+                  <li className="mb-2">
+                    Each dead cell with exactly three neighbors becomes a live
+                    cell, as if by reproduction.
+                  </li>
+                </ul>
+              </div>
+            </div>
           </DialogHeader>
         </DialogContent>
       </Dialog>
       {/* //patterns */}
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger
           render={
             <Button variant="outline" size="lg">
@@ -82,19 +125,24 @@ export default function Controls() {
             </Button>
           }
         />
-        <DialogContent>
+        <DialogContent className="w-[95vw]! md:w-[60vw]! lg:w-[50vw]! max-w-none!">
           <DialogHeader>
-            <DialogTitle>patterns?</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </DialogDescription>
+            <DialogTitle className="text-lg font-semibold">
+              Intresting Patterns
+            </DialogTitle>
+            <div>
+              The blow are few Intersting patterns occures in Game of Life. You
+              can select any pattern to see how it works.
+              <div className="flex w-full my-4 flex-col gap-4">
+                <PatternList onSelectClose={() => setOpen(false)} />
+              </div>
+            </div>
           </DialogHeader>
         </DialogContent>
       </Dialog>
       <Button
         onClick={() => setStart(!start)}
-        disabled={allDead ? true : false}
+        disabled={allDead}
         variant="outline"
         size="lg"
       >
@@ -103,7 +151,7 @@ export default function Controls() {
       </Button>
       <Button
         onClick={handlenextgen}
-        disabled={allDead ? true : false}
+        disabled={allDead}
         variant="outline"
         size="lg"
       >
@@ -112,7 +160,7 @@ export default function Controls() {
       </Button>
       <Button
         onClick={handleRest}
-        disabled={allDead ? true : false}
+        disabled={allDead}
         variant="outline"
         size="lg"
       >

@@ -1,3 +1,4 @@
+import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 
 import Canvas from "./components/Canvas";
@@ -7,21 +8,21 @@ function App() {
   return (
     <>
       <section className="w-full p-2 ">
-        {/* <div className="flex min-h-svh flex-col items-center justify-center">
-          <Button>Click me here</Button>
-        </div> */}
-        {/* 1. main heading
-            2. main canvas
-            3. nav/butn bar
-         */}
-
-        <section className="h-20  text-[40px] pl-2 text-center ">
+        <section className="flex items-center justify-center min-h-20 sm:min-h-24 md:min-h-28 text-3xl sm:text-4xl md:text-5xl font-semibold px-4 text-center">
           Game of Life
         </section>
-        <section className=" m-4 border-amber-300 border-2 rounded-md">
+
+        <section className=" m-4">
+          <Routes>
+            <Route path="/" element={<Navigate to="/glider" replace />} />
+            <Route path="/:patternParams" element={<Canvas />} />
+          </Routes>
+          {/* </section>
           <Canvas />
+         */}
         </section>
-        <section className="h-20  flex flex-row justify-center pt-6 gap-12">
+
+        <section className="h-20  grid grid-cols-2 gap-2 md:flex md:flex-row justify-center pt-6 md:gap-12">
           {/* explanation */}
           <Controls />
         </section>
