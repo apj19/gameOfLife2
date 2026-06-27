@@ -21,7 +21,7 @@ export default function Fixedcontrols() {
       <section className="fixed bottom-30 right-10 z-50  hidden md:block w-40 h-30 rounded-lg ">
         <div className="h-full w-full backdrop-blur-sm flex flex-col items-start gap-4 justify-center p-4 ">
           <div className="w-full flex items-center gap-6 text-md font-semibold">
-            <IconBrandSpeedtest size={24} className="text-white shrink-0" />
+            <IconBrandSpeedtest size={24} className=" shrink-0" />
 
             <Slider
               defaultValue={[2]}
