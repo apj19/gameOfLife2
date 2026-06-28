@@ -61,7 +61,7 @@ function Canvas() {
     function handleResize() {
       const { width, height } = container!.getBoundingClientRect();
       setDimension({ width, height });
-      console.log("resized", width, height);
+      // console.log("resized", width, height);
     }
 
     window.addEventListener("resize", handleResize);

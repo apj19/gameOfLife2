@@ -13,9 +13,13 @@ import { useCellStore } from "@/store/cellStore";
 // }
 
 import { IconBrandSpeedtest, IconNumber } from "@tabler/icons-react";
+import { memo } from "react";
 
-export default function Fixedcontrols() {
-  const { setSpeed, generation } = useCellStore();
+const Fixedcontrols = memo(function Fixedcontrols() {
+  // const { setSpeed, generation } = useCellStore();
+  const generation = useCellStore((state) => state.generation);
+  const setSpeed = useCellStore((state) => state.setSpeed);
+  // console.log("fixed control rendered");
   return (
     <>
       <section className="fixed bottom-30 right-10 z-50  hidden md:block w-40 h-30 rounded-lg ">
@@ -45,4 +49,6 @@ export default function Fixedcontrols() {
       </section>
     </>
   );
-}
+});
+
+export default Fixedcontrols;

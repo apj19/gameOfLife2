@@ -21,14 +21,21 @@ import { useNavigate } from "react-router-dom";
 // import { Icon } from "node_modules/@base-ui/react/select/index.parts";
 
 export default function Controls() {
+  // console.log("controls rendered");
   const navigate = useNavigate();
 
-  const { nextGen, allDead, isAllDead, speed, setGeneration, restGeneration } =
-    useCellStore();
+  // const { allDead, speed } = useCellStore();
   // const nextGen = useCellStore((state) => state.nextGen);
   // const clearCells = useCellStore((state) => state.clearCells);
   // const isAllDead = useCellStore((state) => state.isAllDead);
   // const allDead = useCellStore((state) => state.allDead);
+  const allDead = useCellStore((state) => state.allDead);
+  const speed = useCellStore((state) => state.speed);
+
+  const nextGen = useCellStore.getState().nextGen;
+  const isAllDead = useCellStore.getState().isAllDead;
+  const setGeneration = useCellStore.getState().setGeneration;
+  const restGeneration = useCellStore.getState().restGeneration;
 
   const [start, setStart] = useState(false);
 
